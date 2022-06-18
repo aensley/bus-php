@@ -1,9 +1,11 @@
 <?php
 
-$data = json_decode(file_get_contents('../.data.json'), true);
+require '../config.php';
+
+$data = getData();
 $list = [];
 
-foreach($data as $s => $val) {
+foreach ($data as $s => $val) {
   $list[] = ['s' => $s, 'l' => $val['l'], 'c' => $val['c']];
 }
 

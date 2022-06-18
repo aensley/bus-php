@@ -4,6 +4,7 @@ on: push
 
 jobs:
   build:
+    if: ${{ false }} # Disable for now
     name: Test
     runs-on: ubuntu-latest
     strategy:

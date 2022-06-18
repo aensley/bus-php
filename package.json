@@ -10,6 +10,7 @@
     "luxon": "^2.4.0"
   },
   "devDependencies": {
+    "@cedx/gulp-php-minify": "^12.0.0",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
@@ -37,7 +38,7 @@
   "scripts": {
     "precommit-msg": "echo Running pre-commit checks...",
     "clean": "gulp clean",
-    "test": "standard src/dash/js/*.js && prettier --check .",
+    "test": "standard src/dash/*.js && prettier --check .",
     "build": "npm run clean && gulp",
     "watch": "gulp watch",
     "start": "live-server dist"
@@ -47,5 +48,6 @@
     "url": "https://github.com/aensley/bus"
   },
   "author": "aensley@users.noreply.github.com",
-  "license": "MIT"
+  "license": "MIT",
+  "type": "module"
 }

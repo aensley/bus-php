@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon'
-const $ = require('jquery')
-const dt = require('datatables.net-dt')(window, $)
+import $ from 'jquery'
+import dt from 'datatables.net-bs5'
 
 dt.datetime(DateTime.DATETIME_SHORT)
 
-$(function () {
+window.addEventListener('load', () => {
   $('#list').DataTable({
     ajax: 'list.php',
     columns: [{ data: 's' }, { data: 'l' }, { data: 'c' }],

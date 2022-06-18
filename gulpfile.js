@@ -1,54 +1,82 @@
-const { watch, src, dest, series } = require('gulp')
-const del = require('del')
-const fileInclude = require('gulp-file-include')
-const htmlmin = require('gulp-htmlmin')
-const sass = require('gulp-sass')(require('sass'))
-const imagemin = require('gulp-imagemin')
-const realFavicon = require('gulp-real-favicon')
-const sourcemaps = require('gulp-sourcemaps')
-const fs = require('fs')
-const through = require('through2')
-const named = require('vinyl-named')
-const webpack = require('webpack-stream')
+import gulp from 'gulp'
+import del from 'del'
+import htmlmin from 'gulp-htmlmin'
+import dartSass from 'sass'
+import gulpSass from 'gulp-sass'
+import imagemin from 'gulp-imagemin'
+import sourcemaps from 'gulp-sourcemaps'
+import fs from 'fs'
+import through from 'through2'
+import named from 'vinyl-named'
+import webpack from 'webpack-stream'
+import replace from 'gulp-replace'
+import phpMinify from '@cedx/gulp-php-minify'
+const sass = gulpSass(dartSass)
 let packageJson
+let envJson
 
 const paths = {
-  html: {
-    src: 'src/*.html',
-    dest: 'dist/'
+  root: {
+    php: {
+      src: 'src/**/*.php',
+      dest: 'dist/'
+    },
+    html: {
+      src: 'src/*.html',
+      dest: 'dist/'
+    },
+    img: {
+      src: 'src/img/*'
+    }
   },
-  htmlinclude: 'src/include/*.html',
-  img: {
-    src: 'src/assets/img/*',
-    dest: 'dist/assets/img/'
+  public: {
+    img: {
+      dest: 'dist/public/img/'
+    },
+    scss: {
+      src: 'src/*.scss',
+      dest: 'dist/public/'
+    }
   },
-  js: {
-    src: ['src/assets/js/first.js', 'src/assets/js/app.js'],
-    dest: 'dist/assets/js/',
-    watch: 'src/assets/js/*.js'
-  },
-  scss: {
-    src: 'src/assets/scss/*.scss',
-    dest: 'dist/assets/css/'
+  dash: {
+    js: {
+      src: 'src/dash/app.js',
+      dest: 'dist/dash/'
+    },
+    img: {
+      dest: 'dist/dash/img/'
+    },
+    scss: {
+      src: ['src/*.scss', 'src/dash/*.scss'],
+      dest: 'dist/dash/'
+    }
   }
 }
 
 // Get Package information from package.json
-function getPackageInfo (cb) {
-  packageJson = JSON.parse(fs.readFileSync('./package.json'))
-  cb()
+async function getPackageInfo () {
+  packageJson = JSON.parse(fs.readFileSync('package.json'))
+  envJson = JSON.parse(fs.readFileSync('dist/.env.json'))
+  return Promise.resolve()
 }
 
 // Wipe the dist directory
-function clean (cb) {
-  del(['dist/public/', 'dist/dash/'])
-  cb()
+export async function clean () {
+  return del(['dist/public/', 'dist/dash/', 'dist/*.php', 'dist/*.html'])
+}
+
+// Minify PHP
+export async function php () {
+  console.log(typeof phpMinify)
+  return gulp.src(paths.root.php.src, { read: false })
+    .pipe(phpMinify({ silent: true }))
+    .pipe(gulp.dest(paths.root.php.dest))
 }
 
 // Minify HTML
-function html (cb) {
-  src(paths.html.src)
-    .pipe(fileInclude())
+async function html () {
+  return gulp.src(paths.root.html.src)
+    .pipe(replace('{{public-domain}}', envJson['public-domain']))
     .pipe(
       htmlmin({
         collapseBooleanAttributes: true,
@@ -63,13 +91,12 @@ function html (cb) {
         removeStyleLinkTypeAttributes: true
       })
     )
-    .pipe(dest(paths.html.dest))
-  cb()
+    .pipe(gulp.dest(paths.root.html.dest))
 }
 
 // Minify JavaScript
-function js (cb) {
-  src(paths.js.src)
+async function js () {
+  return gulp.src(paths.dash.js.src)
     .pipe(named())
     .pipe(
       webpack({
@@ -82,15 +109,8 @@ function js (cb) {
               loader: 'string-replace-loader',
               options: {
                 multiple: [
-                  { search: '{commit_hash}', replace: process.env.CF_PAGES_COMMIT_SHA },
-                  { search: '{branch_name}', replace: process.env.CF_PAGES_BRANCH },
-                  {
-                    search: '{environment}',
-                    replace: process.env.CF_PAGES_BRANCH === 'main' ? 'production' : 'development'
-                  },
-                  { search: '{sentry_dsn}', replace: process.env.SENTRY_DSN },
-                  { search: '{package_name}', replace: packageJson.name },
-                  { search: '{package_version}', replace: packageJson.version }
+                  { search: '{{package_name}}', replace: packageJson.name },
+                  { search: '{{package_version}}', replace: packageJson.version }
                 ]
               }
             }
@@ -109,133 +129,54 @@ function js (cb) {
       })
     )
     .pipe(sourcemaps.write('.', { addComment: false }))
-    .pipe(dest(paths.js.dest))
-  cb()
+    .pipe(gulp.dest(paths.dash.js.dest))
 }
 
 // Compile SCSS
-function scss (cb) {
-  src(paths.scss.src)
+export async function scssPublic () {
+  return gulp.src(paths.public.scss.src)
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-    .pipe(dest(paths.scss.dest))
-  cb()
+    .pipe(gulp.dest(paths.public.scss.dest))
+}
+export async function scssDash () {
+  return gulp.src(paths.dash.scss.src)
+    .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+    .pipe(gulp.dest(paths.dash.scss.dest))
 }
 
 // Compress images
-function img (cb) {
-  src(paths.img.src)
+export async function img () {
+  return gulp.src(paths.root.img.src)
     .pipe(
       imagemin([
-        imagemin.gifsicle({
-          optimizationLevel: 3,
-          colors: 128,
-          interlaced: true
-        }),
-        imagemin.mozjpeg({ quality: 50, progressive: true }),
         imagemin.optipng({ optimizationLevel: 7 }),
         imagemin.svgo()
       ])
     )
-    .pipe(dest(paths.img.dest))
-  cb()
-}
-
-// File where the favicon markups are stored
-const FAVICON_DATA_FILE = 'src/faviconData.json'
-
-// Generate the favicon
-function generateFavicon (cb) {
-  return realFavicon.generateFavicon(
-    {
-      masterPicture: 'src/icon.png',
-      dest: 'dist/',
-      iconsPath: '/',
-      design: {
-        ios: {
-          pictureAspect: 'backgroundAndMargin',
-          backgroundColor: '#ffffff',
-          margin: '21%',
-          assets: {
-            ios6AndPriorIcons: false,
-            ios7AndLaterIcons: false,
-            precomposedIcons: false,
-            declareOnlyDefaultIcon: true
-          },
-          appName: 'Andrew Ensley'
-        },
-        desktopBrowser: {
-          design: 'raw'
-        },
-        windows: {
-          pictureAspect: 'whiteSilhouette',
-          backgroundColor: '#930000',
-          onConflict: 'override',
-          assets: {
-            windows80Ie10Tile: false,
-            windows10Ie11EdgeTiles: {
-              small: false,
-              medium: true,
-              big: false,
-              rectangle: false
-            }
-          },
-          appName: 'Andrew Ensley'
-        },
-        androidChrome: {
-          pictureAspect: 'shadow',
-          themeColor: '#ffffff',
-          manifest: {
-            startUrl: 'https://andrewensley.com',
-            display: 'standalone',
-            orientation: 'notSet',
-            onConflict: 'override',
-            declared: true
-          },
-          assets: {
-            legacyIcon: false,
-            lowResolutionIcons: false
-          }
-        },
-        safariPinnedTab: {
-          pictureAspect: 'silhouette',
-          themeColor: '#930000'
-        }
-      },
-      settings: {
-        compression: 5,
-        scalingAlgorithm: 'Mitchell',
-        errorOnImageTooSmall: false,
-        readmeFile: false,
-        htmlCodeFile: false,
-        usePathAsIs: false
-      },
-      markupFile: FAVICON_DATA_FILE
-    },
-    cb
-  )
+    .pipe(gulp.dest(paths.public.img.dest))
+    .pipe(gulp.dest(paths.dash.img.dest))
 }
 
 // Watch for changes
 function watchSrc () {
   console.warn('Watching for changes... Press [CTRL+C] to stop.')
-  watch([paths.html.src, paths.htmlinclude], html)
-  watch(paths.scss.src, scss)
-  watch(paths.img.src, img)
-  watch(paths.js.watch, js)
+  gulp.watch(paths.root.php.src, php)
+  gulp.watch(paths.root.html.src, html)
+  gulp.watch(paths.dash.scss.src, scss)
+  gulp.watch(paths.root.img.src, img)
+  gulp.watch(paths.dash.js.watch, js)
 }
 
-exports.clean = clean
-exports.html = html
-exports.js = js
-exports.scss = scss
-exports.img = img
-exports.generateFavicon = generateFavicon
-exports.default = series(
+export default gulp.series(
   getPackageInfo,
+  php,
   html,
-  scss,
+  scssPublic,
+  scssDash,
   img,
-  js,
-  generateFavicon
+  js
 )
-exports.watch = series(getPackageInfo, watchSrc)
+
+export function watch () {
+  gulp.series(getPackageInfo, watchSrc)
+}

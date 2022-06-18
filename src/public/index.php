@@ -1,8 +1,10 @@
 <?php
 
+require '../config.php';
+
 // Config
-$env = json_decode(file_get_contents('../.env.json'), true);
-$data = json_decode(file_get_contents('../.data.json'), true);
+$env = getEnvJson();
+$data = getData();
 $uri = trim($_SERVER['REQUEST_URI'], '/');
 if ($lastSlash = strrpos($uri, '/')) {
   $uri = substr($uri, $lastSlash);
@@ -10,11 +12,10 @@ if ($lastSlash = strrpos($uri, '/')) {
 
 // Redirect
 if (isset($data[$uri])) {
-  http_response_code(301); // Moved Permanently
+  http_response_code(REDIRECT_STATUS);
   header('Location: ' . $data[$uri]['l']);
   exit;
 }
 
 // Index
-$index = file_get_contents('.index.html');
-echo str_replace('{{site-name}}', $env['public-domain'], $index);
+readfile(PUBLIC_HTML);

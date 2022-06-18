@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{public-domain}} url shortener</title>
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+    <!--<link rel="icon" type="image/png" href="img/favicon.png" />-->
+    <link rel="stylesheet" href="dash.css" />
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="img/favicon.svg" alt="" width="24" height="24" class="d-inline-block" />
+          {{public-domain}}
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarText"
+          aria-controls="navbarText"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+          <span class="navbar-text"> a <a href="https://github.com/aensley/bus">basic url shortener</a> </span>
+        </div>
+      </div>
+    </nav>
+    <table id="list">
+      <thead>
+        <tr>
+          <th>Short</th>
+          <th>Long</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="src/public/img/logo.png" alt="BUS logo"><br/><br/>
+  <img src="src/img/logo.svg" alt="BUS logo" height="196" width="400"><br/><br/>
   Basic URL Shortener
 </h1>
 
@@ -47,13 +47,22 @@ This library offers the simplest of URL shortener setups for self-hosted users. 
    $ npm run build
    ```
 
+### Server Setup
+
+The built site will be available in two directories:
+
+1. **`dist/public/`** - This is for the domain hosting BUS itself, i.e. https://example.com
+1. **`dist/dash`/** - This is for the domain hosting the BUS dashboard, where the short URLs will be created and managed, i.e. https://dash.example.com
+
+Example configs are included for apache for both the [public](examples/apache-site-public.conf) and [dash](examples/apache-site-dash.conf) sites.
+
 ## Configuration
 
 ### .env.json
 
 In the `dist/` folder, you must create a `.env.json` file with the site configuration.
 
-[An example `.env.example.json` file](src/.env.example.json) is included for reference.
+[An example `.env.json` file](examples/.env.json) is included for reference.
 
 Settings:
 
