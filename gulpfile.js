@@ -162,7 +162,8 @@ function watchSrc () {
   console.warn('Watching for changes... Press [CTRL+C] to stop.')
   gulp.watch(paths.root.php.src, php)
   gulp.watch(paths.root.html.src, html)
-  gulp.watch(paths.dash.scss.src, scss)
+  gulp.watch(paths.public.scss.src, scssPublic)
+  gulp.watch(paths.dash.scss.src, scssDash)
   gulp.watch(paths.root.img.src, img)
   gulp.watch(paths.dash.js.watch, js)
 }
