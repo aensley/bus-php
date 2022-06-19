@@ -3,5 +3,8 @@
 @import '../../node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min';
 @import '../../node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min';
 
-/* Basic styles */
-//@import '../min';
+.navbar-brand,
+.navbar-text,
+.navbar-text a {
+  color: #06bee1 !important;
+}

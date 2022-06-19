@@ -66,8 +66,7 @@ export async function clean () {
 }
 
 // Minify PHP
-export async function php () {
-  console.log(typeof phpMinify)
+async function php () {
   return gulp.src(paths.root.php.src, { read: false })
     .pipe(phpMinify({ silent: true }))
     .pipe(gulp.dest(paths.root.php.dest))
@@ -133,26 +132,21 @@ async function js () {
 }
 
 // Compile SCSS
-export async function scssPublic () {
+async function scssPublic () {
   return gulp.src(paths.public.scss.src)
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(gulp.dest(paths.public.scss.dest))
 }
-export async function scssDash () {
+async function scssDash () {
   return gulp.src(paths.dash.scss.src)
     .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
     .pipe(gulp.dest(paths.dash.scss.dest))
 }
 
 // Compress images
-export async function img () {
+async function img () {
   return gulp.src(paths.root.img.src)
-    .pipe(
-      imagemin([
-        imagemin.optipng({ optimizationLevel: 7 }),
-        imagemin.svgo()
-      ])
-    )
+    .pipe(imagemin([imagemin.svgo()]))
     .pipe(gulp.dest(paths.public.img.dest))
     .pipe(gulp.dest(paths.dash.img.dest))
 }
@@ -165,7 +159,7 @@ function watchSrc () {
   gulp.watch(paths.public.scss.src, scssPublic)
   gulp.watch(paths.dash.scss.src, scssDash)
   gulp.watch(paths.root.img.src, img)
-  gulp.watch(paths.dash.js.watch, js)
+  gulp.watch(paths.dash.js.src, js)
 }
 
 export default gulp.series(
@@ -178,6 +172,4 @@ export default gulp.series(
   js
 )
 
-export function watch () {
-  gulp.series(getPackageInfo, watchSrc)
-}
+export const watch = gulp.series(getPackageInfo, watchSrc)

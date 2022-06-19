@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{public-domain}} url shortener</title>
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
-    <!--<link rel="icon" type="image/png" href="img/favicon.png" />-->
     <link rel="stylesheet" href="dash.css" />
     <script defer src="app.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-      <div class="container-fluid">
+      <div class="container">
         <a class="navbar-brand" href="#">
           <img src="img/favicon.svg" alt="" width="24" height="24" class="d-inline-block" />
           {{public-domain}}
@@ -26,20 +25,37 @@
           aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarText">
+        <div class="collapse navbar-collapse justify-content-end" id="navbarText">
           <span class="navbar-text"> a <a href="https://github.com/aensley/bus">basic url shortener</a> </span>
         </div>
       </div>
     </nav>
-    <table id="list">
-      <thead>
-        <tr>
-          <th>Short</th>
-          <th>Long</th>
-          <th>Created</th>
-          <th></th>
-        </tr>
-      </thead>
-    </table>
+    <div class="container">
+      <div class="row my-5">
+        <div class="col">
+          <form>
+            <div class="row g-3 align-items-center">
+              <div class="col-auto">
+                <input type="url" id="url" class="form-control" placeholder="Paste URL..." />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <table id="list">
+            <thead>
+              <tr>
+                <th>Short</th>
+                <th>Long</th>
+                <th>Created</th>
+                <th></th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
