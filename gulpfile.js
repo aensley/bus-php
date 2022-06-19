@@ -146,7 +146,10 @@ async function scssDash () {
 // Compress images
 async function img () {
   return gulp.src(paths.root.img.src)
-    .pipe(imagemin([imagemin.svgo()]))
+    .pipe(imagemin([
+      imagemin.optipng({ optimizationLevel: 7 }),
+      imagemin.svgo()
+    ]))
     .pipe(gulp.dest(paths.public.img.dest))
     .pipe(gulp.dest(paths.dash.img.dest))
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{public-domain}} url shortener</title>
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
+    <link rel="icon" type="image/png" href="img/favicon.png" />
     <link rel="stylesheet" href="dash.css" />
     <script defer src="app.js"></script>
   </head>
@@ -33,7 +34,7 @@
     <div class="container">
       <form class="my-5">
         <div class="row g-2 mb-2">
-          <div class="col-8 offset-2">
+          <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             <div class="input-group">
               <input
                 type="url"
@@ -47,8 +48,13 @@
           </div>
         </div>
         <div class="row g-2 mb-2 d-none" id="shortRow">
-          <div class="col-8 offset-2">
-            <input type="text" id="short" name="short" class="form-control form-control-lg" placeholder="Short-code" />
+          <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+            <input
+              type="text"
+              id="short"
+              name="short"
+              class="form-control form-control-lg"
+              placeholder="Enter your custom short-code" />
           </div>
         </div>
         <div class="row">
