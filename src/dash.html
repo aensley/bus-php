@@ -31,17 +31,33 @@
       </div>
     </nav>
     <div class="container">
-      <div class="row my-5">
-        <div class="col">
-          <form>
-            <div class="row g-3 align-items-center">
-              <div class="col-auto">
-                <input type="url" id="url" class="form-control" placeholder="Paste URL..." />
-              </div>
+      <form class="my-5">
+        <div class="row g-2 mb-2">
+          <div class="col-8 offset-2">
+            <div class="input-group">
+              <input
+                type="url"
+                id="long"
+                name="long"
+                class="form-control form-control-lg"
+                placeholder="Paste your long URL"
+                aria-label="Paste your long URL" />
+              <button class="btn btn-primary" type="submit">Create</button>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+        <div class="row g-2 mb-2 d-none" id="shortRow">
+          <div class="col-8 offset-2">
+            <input type="text" id="short" name="short" class="form-control form-control-lg" placeholder="Short-code" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 form-check form-switch d-flex justify-content-center">
+            <input class="form-check-input me-2" type="checkbox" role="switch" id="customShort" />
+            <label class="form-check-label" for="customShort">Customize short-code</label>
+          </div>
+        </div>
+      </form>
       <div class="row">
         <div class="col">
           <table id="list">

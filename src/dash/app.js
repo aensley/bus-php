@@ -5,6 +5,10 @@ import dt from 'datatables.net-bs5'
 dt.datetime(DateTime.DATETIME_SHORT)
 
 window.addEventListener('load', () => {
+  $('#customShort').on('change', function () {
+    $('#shortRow').toggleClass('d-none')
+  })
+
   $('#list').DataTable({
     ajax: 'list.php',
     columns: [{ data: 's' }, { data: 'l' }, { data: 'c' }],
