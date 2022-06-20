@@ -32,7 +32,7 @@
       </div>
     </nav>
     <div class="container">
-      <form class="my-5">
+      <form id="addForm" class="my-5">
         <div class="row g-2 mb-2">
           <div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
             <div class="input-group">
@@ -42,8 +42,9 @@
                 name="long"
                 class="form-control form-control-lg"
                 placeholder="Paste your long URL"
-                aria-label="Paste your long URL" />
-              <button class="btn btn-primary" type="submit">Create</button>
+                aria-label="Paste your long URL"
+                required />
+              <button class="btn btn-primary" type="submit">+</button>
             </div>
           </div>
         </div>
@@ -64,7 +65,10 @@
           </div>
         </div>
       </form>
-      <div class="row">
+      <div class="row my-3">
+        <div class="col"><div id="status" class="d-none"></div></div>
+      </div>
+      <div class="row my-3">
         <div class="col">
           <table id="list">
             <thead>

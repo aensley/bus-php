@@ -48,7 +48,7 @@ if (empty($short)) {
 }
 
 // All checks complete. Add the URL.
-$data[$short] = ['l' => $long, $c => time()];
+$data[$short] = ['l' => $long, 'c' => time()];
 try {
   setData($data);
   echo json_encode(

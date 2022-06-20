@@ -4,9 +4,31 @@ import dt from 'datatables.net-bs5'
 
 dt.datetime(DateTime.DATETIME_SHORT)
 
+const setStatus = (data) => {
+  const classes = 'text-light bg-' + (data.status === 'success' ? 'success' : 'danger')
+  $('#status').removeClass().addClass(classes).text(data.message)
+}
+
 window.addEventListener('load', () => {
-  $('#customShort').on('change', function () {
+  $('#customShort').on('change', () => {
     $('#shortRow').toggleClass('d-none')
+  })
+
+  $('#addForm').on('submit', (e) => {
+    e.preventDefault()
+    $.post('create.php', {
+      s: $('#short').val(),
+      l: $('#long').val()
+    })
+      .done((d) => {
+        setStatus(d)
+      })
+      .fail((d) => {
+        setStatus(d)
+      })
+      .always((d) => {
+        setStatus(d)
+      })
   })
 
   $('#list').DataTable({
