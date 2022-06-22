@@ -76,6 +76,8 @@ async function php () {
 async function html () {
   return gulp.src(paths.root.html.src)
     .pipe(replace('{{public-domain}}', envJson['public-domain']))
+    // .pipe(replace('{{link-to-dash}}', (envJson['link-to-dash'] ? '<p><small><a href="https://' + envJson['dash-domain'] + '">Manage</a></small></p>' : '')))
+    .pipe(replace('{{link-to-dash}}', ''))
     .pipe(
       htmlmin({
         collapseBooleanAttributes: true,
@@ -146,10 +148,7 @@ async function scssDash () {
 // Compress images
 async function img () {
   return gulp.src(paths.root.img.src)
-    .pipe(imagemin([
-      imagemin.optipng({ optimizationLevel: 7 }),
-      imagemin.svgo()
-    ]))
+    .pipe(imagemin([imagemin.svgo()]))
     .pipe(gulp.dest(paths.public.img.dest))
     .pipe(gulp.dest(paths.dash.img.dest))
 }
@@ -167,12 +166,12 @@ function watchSrc () {
 
 export default gulp.series(
   getPackageInfo,
-  php,
-  html,
+  js,
+  img,
   scssPublic,
   scssDash,
-  img,
-  js
+  php,
+  html
 )
 
 export const watch = gulp.series(getPackageInfo, watchSrc)

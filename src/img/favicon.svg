@@ -1,12 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="512" height="512">
-  <svg width="512" height="512" viewBox="0 0 135.46666 135.46667" version="1.1" id="SvgjsSvg1005" inkscape:version="1.1.2 (0a00cf5339, 2022-02-04, custom)" sodipodi:docname="icon.orig.svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
-    <sodipodi:namedview id="SvgjsSodipodi:namedview1004" pagecolor="#ffffff" bordercolor="#666666" borderopacity="1.0" inkscape:pageshadow="2" inkscape:pageopacity="0.0" inkscape:pagecheckerboard="0" inkscape:document-units="mm" showgrid="false" units="px" width="512px" inkscape:zoom="0.54866744" inkscape:cx="744.53115" inkscape:cy="240.58289" inkscape:window-width="1920" inkscape:window-height="1057" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:window-maximized="1" inkscape:current-layer="layer1"></sodipodi:namedview>
-    <defs id="SvgjsDefs1003"></defs>
-    <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="SvgjsG1002">
-      <text xml:space="preserve" style="font-style:normal;font-weight:normal;font-size:13.0927px;line-height:1.25;font-family:sans-serif;fill:#06bee1;fill-opacity:1;stroke:none;stroke-width:0.327317" x="-16.684454" y="139.01935" id="SvgjsText1001" transform="scale(0.80833843,1.2371056)" svgjs:data="{&quot;leading&quot;:&quot;1.3&quot;}">
-        <tspan sodipodi:role="line" id="SvgjsTspan1000" style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:362.232px;font-family:'Sue Ellen Francisco';-inkscape-font-specification:'Sue Ellen Francisco, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.327317;fill:#06bee1;fill-opacity:1" x="-16.684454" y="139.01935" svgjs:data="{&quot;leading&quot;:&quot;1.3&quot;}">&gt;&lt;</tspan>
-      </text>
-    </g>
-  </svg>
-  <style>@media(prefers-color-scheme:light){:root{filter:none}}@media(prefers-color-scheme:dark){:root{filter:none}}</style>
+<svg width="512" height="512" version="1.1" viewBox="0 0 135.47 135.47"
+  xmlns="http://www.w3.org/2000/svg">
+  <g transform="scale(.80834 1.2371)" fill="#06bee1" stroke-width=".32732" aria-label="&gt;&lt;">
+    <path d="m9.1387 23.699q4.2449 0 56.599 34.313 3.5374 4.2449 3.5374 9.9048 0 2.8299-24.408 20.163-16.98 21.225-24.762 21.225-8.8436-2.8299-8.8436-9.9048v-1.0612q0-5.3061 26.884-31.129v-2.4762q-37.85-22.64-37.85-30.068v-1.415q0-4.9524 8.8436-9.551z"/>
+    <path d="m156.3 0.35241q9.1973 0 10.966 12.027 0 4.2449-37.85 44.572v1.0612q31.483 14.15 31.483 21.225v1.0612q-1.7687 9.9048-10.259 9.9048-45.279-17.687-50.231-32.191 0-6.0136 31.483-32.191 15.565-20.871 24.408-25.469z"/>
+  </g>
 </svg>

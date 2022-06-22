@@ -39,11 +39,13 @@ if (!empty($short) && array_key_exists($short, $data)) {
   exit;
 }
 
+$algo = getHashAlgo();
+
 // Generate short code
 if (empty($short)) {
   $count = 0;
   do {
-    $short = substr(hash('sha512', $long . $count++), 0, 6);
+    $short = substr(hash($algo, $long . $count++), 0, 4);
   } while (array_key_exists($short, $data));
 }
 
@@ -61,4 +63,16 @@ try {
     ['status' => 'error', 'message' => 'Unable to add Short URL', 'short' => $short, 'long' => $long],
     JSON_FORCE_OBJECT
   );
+}
+
+function getHashAlgo() {
+  $hashAlgos = hash_algos();
+  $preferredAlgos = ['crc32c', 'crc32', 'crc32b', 'adler32', 'md4', 'md5'];
+  foreach($hashAlgos as $a) {
+    if (in_array($a, $hashAlgos)) {
+      return $a;
+    }
+  }
+
+  return 'sha1';
 }
