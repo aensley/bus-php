@@ -23,6 +23,11 @@ function getEnvJson() {
   return json_decode(file_get_contents(ENV_JSON), true);
 }
 
+function getShortCodeLength() {
+  $env = getEnvJson();
+  return (!empty($env['short-code-length']) ? $env['short-code-length'] : 4);
+}
+
 function getData() {
   if (!file_exists(DATA_JSON) || !is_writable(DATA_JSON)) {
     http_response_code(500);

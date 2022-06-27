@@ -76,8 +76,9 @@ async function php () {
 async function html () {
   return gulp.src(paths.root.html.src)
     .pipe(replace('{{public-domain}}', envJson['public-domain']))
-    // .pipe(replace('{{link-to-dash}}', (envJson['link-to-dash'] ? '<p><small><a href="https://' + envJson['dash-domain'] + '">Manage</a></small></p>' : '')))
-    .pipe(replace('{{link-to-dash}}', ''))
+    .pipe(replace('{{link-to-dash}}', (envJson['link-to-dash'] ? '<a href="https://' + envJson['dash-domain'] + '">Manage</a>' : '')))
+    .pipe(replace('{{package-name}}', packageJson.name))
+    .pipe(replace('{{package-version}}', packageJson.version))
     .pipe(
       htmlmin({
         collapseBooleanAttributes: true,
@@ -110,8 +111,9 @@ async function js () {
               loader: 'string-replace-loader',
               options: {
                 multiple: [
-                  { search: '{{package_name}}', replace: packageJson.name },
-                  { search: '{{package_version}}', replace: packageJson.version }
+                  { search: '{{public-domain}}', replace: envJson['public-domain'] },
+                  { search: '{{package-name}}', replace: packageJson.name },
+                  { search: '{{package-version}}', replace: packageJson.version }
                 ]
               }
             }

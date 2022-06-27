@@ -1,20 +1,42 @@
 import $ from 'jquery'
 import 'datatables.net-bs5'
+import 'datatables.net-responsive-bs5'
 import { library, icon } from '@fortawesome/fontawesome-svg-core'
-import { faPencil, faTrashCan, faPlay } from '@fortawesome/free-solid-svg-icons'
+import { faTrashCan, faPlay } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faPencil, faTrashCan, faPlay)
+const publicDomain = '{{public-domain}}'
+library.add(faTrashCan, faPlay)
 
 const play = icon({ prefix: 'fas', iconName: 'play' }).html
-const pencil = icon({ prefix: 'fas', iconName: 'pencil' }).html
 const trashCan = icon({ prefix: 'fas', iconName: 'trash-can' }).html
 
 const setStatus = (data) => {
-  const classes = 'text-light bg-' + (data.status === 'success' ? 'success' : 'danger')
-  $('#status').removeClass().addClass(classes).text(data.message)
+  console.log(data)
+  const classes = 'p-4 fw-bold fs-5 text-center text-light bg-' + (data.status === 'success' ? 'success' : 'danger')
+  const $status = $('#status')
+  $status.removeClass().addClass(classes).text(data.message)
+  if (data.action === 'create' && data.short) {
+    $status.append(
+      '<p class="mt-3 mb-0">Click to copy: <a href="https://' +
+        publicDomain +
+        '/' +
+        data.short +
+        '" title="Copy Short URL" class="copy link-light me-1">' +
+        publicDomain +
+        '/' +
+        data.short +
+        '</a></p>'
+    )
+  }
 }
 
 window.addEventListener('load', () => {
+  $('main').on('click', 'a.copy', function (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    e.stopImmediatePropagation()
+    navigator.clipboard.writeText($(this).prop('href'))
+  })
   $('button[type="submit"]').html(play)
   $('#customShort').on('change', () => {
     $('#shortRow').toggleClass('d-none')
@@ -22,18 +44,21 @@ window.addEventListener('load', () => {
 
   $('#addForm').on('submit', (e) => {
     e.preventDefault()
-    $.post('create.php', {
-      s: $('#short').val(),
-      l: $('#long').val()
+    $.ajax({
+      url: 'create.php',
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        s: $('#short').val(),
+        l: $('#long').val()
+      }
     })
       .done((d) => {
         setStatus(d)
+        updateTable()
       })
       .fail((d) => {
-        setStatus(d)
-      })
-      .always((d) => {
-        setStatus(d)
+        setStatus(JSON.parse(d.responseText))
       })
   })
 
@@ -41,6 +66,24 @@ window.addEventListener('load', () => {
     ajax: 'list.php',
     columns: [{ data: 's' }, { data: 'l' }, { data: 'c' }],
     columnDefs: [
+      {
+        targets: 0,
+        render: (data, type) => {
+          if (type === 'display') {
+            return (
+              '<a class="btn btn-secondary" href="https://' +
+              publicDomain +
+              '/' +
+              data +
+              '" title="Copy Short URL" class="copy ms-1">' +
+              data +
+              '</a>'
+            )
+          }
+
+          return data
+        }
+      },
       {
         targets: 2,
         render: (data, type) => {
@@ -56,30 +99,41 @@ window.addEventListener('load', () => {
         className: 'text-center',
         data: null,
         defaultContent:
-          '<button class="btn btn-warning">' +
-          pencil +
-          ' Edit</button> <button class="btn btn-danger">' +
+          '<button class="btn btn-danger" title="Delete">' +
           trashCan +
-          ' Delete</button>'
+          '<span class="d-none d-lg-inline-block ms-2">Delete</span></button>'
       }
     ],
     deferRender: true,
-    dom: 'BLfrtip',
+    dom: 'Blfrtip',
     lengthMenu: [5, 10, 25, 50, 100],
-    pageLength: 10,
+    pageLength: 5,
     responsive: true
   })
 
+  const updateTable = () => {
+    listTable.ajax.reload()
+  }
+
   $('#list tbody').on('click', 'button', function () {
     const data = listTable.row($(this).parents('tr')[0]).data()
-    if ($.trim($(this).text()) === 'Delete') {
-      if (window.confirm('Are you sure you want to delete short URL "' + data.s + '" => "' + data.l + '"?')) {
-        console.log('Delete ' + data.s)
-      } else {
-        console.log("Don't delete")
-      }
+    if (window.confirm('Are you sure you want to delete short URL ' + data.s + ' => ' + data.l + '?')) {
+      console.log('Delete ' + data.s)
+      $.ajax({
+        url: 'delete.php',
+        method: 'POST',
+        dataType: 'json',
+        data: { s: data.s }
+      })
+        .done((d) => {
+          setStatus(d)
+          updateTable()
+        })
+        .fail((d) => {
+          setStatus(JSON.parse(d.responseText))
+        })
     } else {
-      console.log('Edit ' + data.s + ' => ' + data.l)
+      console.log("Don't delete")
     }
   })
 })

@@ -9,7 +9,7 @@ $long = $_POST['l'];
 if (empty($long)) {
   http_response_code(400);
   echo json_encode(
-    ['status' => 'error', 'message' => 'Insufficient data supplied'],
+    ['action' => 'create', 'status' => 'error', 'message' => 'Insufficient data supplied'],
     JSON_FORCE_OBJECT
   );
   exit;
@@ -23,7 +23,7 @@ $found = array_search($long, $longs);
 if ($found !== false) {
   $shorts = array_keys($data);
   echo json_encode(
-    ['status' => 'success', 'message' => 'URL is already shortened', 'short' => $shorts[$found], 'long' => $long],
+    ['action' => 'create', 'status' => 'success', 'message' => 'URL is already shortened', 'short' => $shorts[$found], 'long' => $long],
     JSON_FORCE_OBJECT
   );
   exit;
@@ -33,19 +33,20 @@ if ($found !== false) {
 if (!empty($short) && array_key_exists($short, $data)) {
   http_response_code(400);
   echo json_encode(
-    ['status' => 'error', 'message' => 'Short URL already exists', 'short' => $short, 'long' => $data[$short]['l']],
+    ['action' => 'create', 'status' => 'error', 'message' => 'Short URL already exists', 'short' => $short, 'long' => $data[$short]['l']],
     JSON_FORCE_OBJECT
   );
   exit;
 }
 
 $algo = getHashAlgo();
+$shortCodeLength = getShortCodeLength();
 
 // Generate short code
 if (empty($short)) {
   $count = 0;
   do {
-    $short = substr(hash($algo, $long . $count++), 0, 4);
+    $short = substr(hash($algo, $long . $count++), 0, $shortCodeLength);
   } while (array_key_exists($short, $data));
 }
 
@@ -54,21 +55,22 @@ $data[$short] = ['l' => $long, 'c' => time()];
 try {
   setData($data);
   echo json_encode(
-    ['status' => 'success', 'message' => 'Short URL added', 'short' => $short, 'long' => $long],
+    ['action' => 'create', 'status' => 'success', 'message' => 'Short URL added', 'short' => $short, 'long' => $long],
     JSON_FORCE_OBJECT
   );
 } catch (Exception $e) {
   http_response_code(500);
   echo json_encode(
-    ['status' => 'error', 'message' => 'Unable to add Short URL', 'short' => $short, 'long' => $long],
+    ['action' => 'create', 'status' => 'error', 'message' => 'Unable to add Short URL', 'short' => $short, 'long' => $long],
     JSON_FORCE_OBJECT
   );
 }
 
 function getHashAlgo() {
+  // Find the most efficient supported hash algorithm
   $hashAlgos = hash_algos();
   $preferredAlgos = ['crc32c', 'crc32', 'crc32b', 'adler32', 'md4', 'md5'];
-  foreach($hashAlgos as $a) {
+  foreach ($preferredAlgos as $a) {
     if (in_array($a, $hashAlgos)) {
       return $a;
     }
