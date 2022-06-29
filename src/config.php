@@ -17,7 +17,7 @@ function getEnvJson() {
   if (!file_exists(ENV_JSON)) {
     http_response_code(500);
     readfile(NO_ENV_HTML);
-    exit;
+    exit();
   }
 
   return json_decode(file_get_contents(ENV_JSON), true);
@@ -25,14 +25,14 @@ function getEnvJson() {
 
 function getShortCodeLength() {
   $env = getEnvJson();
-  return (!empty($env['short-code-length']) ? $env['short-code-length'] : 4);
+  return !empty($env['short-code-length']) ? $env['short-code-length'] : 4;
 }
 
 function getData() {
   if (!file_exists(DATA_JSON) || !is_writable(DATA_JSON)) {
     http_response_code(500);
     readfile(NO_DATA_HTML);
-    exit;
+    exit();
   }
 
   return json_decode(file_get_contents(DATA_JSON), true);

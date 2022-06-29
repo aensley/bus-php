@@ -2,7 +2,7 @@
 
 require '../config.php';
 
-$short = (!empty($_POST['s']) ? preg_replace('/[^a-z0-9-]/i', '', $_POST['s']) : '');
+$short = !empty($_POST['s']) ? preg_replace('/[^a-z0-9-]/i', '', $_POST['s']) : '';
 $long = $_POST['l'];
 
 // Make sure at least the long URL was supplied.
@@ -12,7 +12,18 @@ if (empty($long)) {
     ['action' => 'create', 'status' => 'error', 'message' => 'Insufficient data supplied'],
     JSON_FORCE_OBJECT
   );
-  exit;
+  exit();
+}
+
+// Validate long URL input
+if (!filter_var($long, FILTER_VALIDATE_URL)) {
+  // We weren't given a URL. Fail.
+  http_response_code(400);
+  echo json_encode(
+    ['action' => 'create', 'status' => 'error', 'message' => 'Invalid URL supplied. Correct the URL and try again.'],
+    JSON_FORCE_OBJECT
+  );
+  exit();
 }
 
 $data = getData();
@@ -23,20 +34,32 @@ $found = array_search($long, $longs);
 if ($found !== false) {
   $shorts = array_keys($data);
   echo json_encode(
-    ['action' => 'create', 'status' => 'success', 'message' => 'URL is already shortened', 'short' => $shorts[$found], 'long' => $long],
+    [
+      'action' => 'create',
+      'status' => 'success',
+      'message' => 'URL is already shortened',
+      'short' => $shorts[$found],
+      'long' => $long,
+    ],
     JSON_FORCE_OBJECT
   );
-  exit;
+  exit();
 }
 
 // Make sure the short URL isn't already taken.
 if (!empty($short) && array_key_exists($short, $data)) {
   http_response_code(400);
   echo json_encode(
-    ['action' => 'create', 'status' => 'error', 'message' => 'Short URL already exists', 'short' => $short, 'long' => $data[$short]['l']],
+    [
+      'action' => 'create',
+      'status' => 'error',
+      'message' => 'Short URL already exists',
+      'short' => $short,
+      'long' => $data[$short]['l'],
+    ],
     JSON_FORCE_OBJECT
   );
-  exit;
+  exit();
 }
 
 $algo = getHashAlgo();
@@ -61,7 +84,13 @@ try {
 } catch (Exception $e) {
   http_response_code(500);
   echo json_encode(
-    ['action' => 'create', 'status' => 'error', 'message' => 'Unable to add Short URL', 'short' => $short, 'long' => $long],
+    [
+      'action' => 'create',
+      'status' => 'error',
+      'message' => 'Unable to add Short URL',
+      'short' => $short,
+      'long' => $long,
+    ],
     JSON_FORCE_OBJECT
   );
 }

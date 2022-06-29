@@ -2,7 +2,7 @@
 
 require '../config.php';
 
-$short = (!empty($_POST['s']) ? preg_replace('/[^a-z0-9-]/i', '', $_POST['s']) : '');
+$short = !empty($_POST['s']) ? preg_replace('/[^a-z0-9-]/i', '', $_POST['s']) : '';
 
 // Make sure the short-code was supplied.
 if (empty($short)) {
@@ -11,7 +11,7 @@ if (empty($short)) {
     ['action' => 'delete', 'status' => 'error', 'message' => 'Insufficient data supplied'],
     JSON_FORCE_OBJECT
   );
-  exit;
+  exit();
 }
 
 $data = getData();
@@ -23,7 +23,7 @@ if (!array_key_exists($short, $data)) {
     ['action' => 'delete', 'status' => 'error', 'message' => 'Short URL not found', 'short' => $short],
     JSON_FORCE_OBJECT
   );
-  exit;
+  exit();
 }
 
 // All checks complete. Delete the URL.

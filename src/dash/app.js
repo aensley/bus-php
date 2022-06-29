@@ -1,6 +1,5 @@
 import $ from 'jquery'
 import 'datatables.net-bs5'
-import 'datatables.net-responsive-bs5'
 import { library, icon } from '@fortawesome/fontawesome-svg-core'
 import { faTrashCan, faPlay } from '@fortawesome/free-solid-svg-icons'
 
@@ -9,6 +8,7 @@ library.add(faTrashCan, faPlay)
 
 const play = icon({ prefix: 'fas', iconName: 'play' }).html
 const trashCan = icon({ prefix: 'fas', iconName: 'trash-can' }).html
+let $copyMessage
 
 const setStatus = (data) => {
   console.log(data)
@@ -31,11 +31,17 @@ const setStatus = (data) => {
 }
 
 window.addEventListener('load', () => {
+  $copyMessage = $('#copyMessage')
   $('main').on('click', 'a.copy', function (e) {
     e.preventDefault()
     e.stopPropagation()
     e.stopImmediatePropagation()
     navigator.clipboard.writeText($(this).prop('href'))
+    $copyMessage.css('display', 'flex')
+    setTimeout(() => {
+      $copyMessage.fadeOut()
+    }, 1000)
+    return false
   })
   $('button[type="submit"]').html(play)
   $('#customShort').on('change', () => {
@@ -68,14 +74,15 @@ window.addEventListener('load', () => {
     columnDefs: [
       {
         targets: 0,
+        className: 'text-nowrap',
         render: (data, type) => {
           if (type === 'display') {
             return (
-              '<a class="btn btn-secondary" href="https://' +
+              '<a href="https://' +
               publicDomain +
               '/' +
               data +
-              '" title="Copy Short URL" class="copy ms-1">' +
+              '" title="Copy Short URL" class="btn btn-secondary copy text-nowrap">' +
               data +
               '</a>'
             )
@@ -85,7 +92,19 @@ window.addEventListener('load', () => {
         }
       },
       {
+        targets: 1,
+        className: 'dt-overflow align-middle',
+        render: (data, type) => {
+          if (type === 'display') {
+            return '<span><a href="' + data + '" class="copy" title="Copy Long URL">' + data + '</a></span>'
+          }
+
+          return data
+        }
+      },
+      {
         targets: 2,
+        className: 'd-none d-md-table-cell text-nowrap align-middle text-center',
         render: (data, type) => {
           if (type === 'display') {
             return new Date(data * 1000).toLocaleString('en-US', { dateStyle: 'short', timeStyle: 'short' })
@@ -96,10 +115,10 @@ window.addEventListener('load', () => {
       },
       {
         targets: 3,
-        className: 'text-center',
+        className: 'text-center text-nowrap',
         data: null,
         defaultContent:
-          '<button class="btn btn-danger" title="Delete">' +
+          '<button class="btn btn-danger text-nowrap" title="Delete">' +
           trashCan +
           '<span class="d-none d-lg-inline-block ms-2">Delete</span></button>'
       }
@@ -107,8 +126,7 @@ window.addEventListener('load', () => {
     deferRender: true,
     dom: 'Blfrtip',
     lengthMenu: [5, 10, 25, 50, 100],
-    pageLength: 5,
-    responsive: true
+    pageLength: 5
   })
 
   const updateTable = () => {

@@ -14,7 +14,7 @@ if ($lastSlash = strrpos($uri, '/')) {
 if (strlen($uri) > 0 && isset($data[$uri])) {
   http_response_code(REDIRECT_STATUS);
   header('Location: ' . $data[$uri]['l']);
-  exit;
+  exit();
 }
 
 // Index

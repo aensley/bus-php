@@ -6,13 +6,12 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "bootstrap": "^5.1.3",
-    "bootswatch": "^5.1.3",
     "datatables.net-bs5": "^1.12.1",
-    "datatables.net-responsive-bs5": "^2.3.0",
     "jquery": "^3.6.0"
   },
   "devDependencies": {
     "@cedx/gulp-php-minify": "^12.0.0",
+    "@prettier/plugin-php": "^0.18.8",
     "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
@@ -38,6 +37,7 @@
   "scripts": {
     "precommit-msg": "echo Running pre-commit checks...",
     "clean": "gulp clean",
+    "format": "prettier --write .",
     "test": "standard src/dash/*.js && prettier --check .",
     "build": "npm run clean && gulp",
     "watch": "npm run build && gulp watch",

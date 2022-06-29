@@ -1,3 +1,8 @@
+/* Minimal CSS for stand-along pages */
+
+// Theme customization
+@import '_variables-common';
+
 *,
 ::after,
 ::before {
@@ -14,14 +19,13 @@ html {
   justify-content: center;
   align-items: center;
   text-align: center;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans',
-    sans-serif;
+  font-family: $font-family-sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   body,
   html {
-    color: #fff;
-    background: #222;
+    color: $white;
+    background: $gray-900;
   }
 }
 h1 {
@@ -39,11 +43,11 @@ p {
   margin: 0 0 1rem 0;
 }
 a {
-  color: #06bee1;
+  color: $primary;
   text-decoration: underline;
 }
 a:hover {
-  color: #f6ae2d;
+  color: $yellow;
 }
 code {
   font-size: 16px;
