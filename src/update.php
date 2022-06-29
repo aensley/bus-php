@@ -1,17 +1,14 @@
 <?php
 
-require '../config.php';
-
-$short = !empty($_POST['s']) ? preg_replace('/[^a-z0-9-]/i', '', $_POST['s']) : '';
-$long = $_POST['l'];
-$data = getData();
+$short = getShort();
+$long = getLong();
 
 // Make sure short and long are supplied.
 if (empty($short) || empty($long)) {
   http_response_code(400);
   echo json_encode(
     ['action' => 'update', 'status' => 'error', 'message' => 'Insufficient data supplied'],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
   exit();
 }
@@ -21,7 +18,7 @@ if (!array_key_exists($short, $data)) {
   http_response_code(400);
   echo json_encode(
     ['action' => 'update', 'status' => 'error', 'message' => 'Invalid short URL supplied'],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
   exit();
 }
@@ -32,7 +29,7 @@ try {
   setData($data);
   echo json_encode(
     ['action' => 'update', 'status' => 'success', 'message' => 'Short URL updated', 'short' => $short, 'long' => $long],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
 } catch (Exception $e) {
   http_response_code(500);
@@ -44,6 +41,6 @@ try {
       'short' => $short,
       'long' => $long,
     ],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
 }

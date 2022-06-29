@@ -13,6 +13,19 @@ const REDIRECT_STATUS = 301; // Moved Permanently
 
 date_default_timezone_set('UTC');
 
+function getRequestedUrl() {
+  $url = trim($_SERVER['REQUEST_URI'], '/');
+  if ($questionPos = strpos($url, '?')) {
+    $url = substr($url, 0, $questionPos);
+  }
+
+  if ($lastSlash = strrpos($url, '/')) {
+    $url = substr($url, $lastSlash);
+  }
+
+  return $url;
+}
+
 function getEnvJson() {
   if (!file_exists(ENV_JSON)) {
     http_response_code(500);

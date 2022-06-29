@@ -9,12 +9,12 @@ library.add(faTrashCan, faPlay)
 const play = icon({ prefix: 'fas', iconName: 'play' }).html
 const trashCan = icon({ prefix: 'fas', iconName: 'trash-can' }).html
 let $copyMessage
+let $status
 
 const setStatus = (data) => {
   console.log(data)
   const classes = 'p-4 fw-bold fs-5 text-center text-light bg-' + (data.status === 'success' ? 'success' : 'danger')
-  const $status = $('#status')
-  $status.removeClass().addClass(classes).text(data.message)
+  $status.removeClass().addClass(classes).text(data.message).show()
   if (data.action === 'create' && data.short) {
     $status.append(
       '<p class="mt-3 mb-0">Click to copy: <a href="https://' +
@@ -28,10 +28,18 @@ const setStatus = (data) => {
         '</a></p>'
     )
   }
+
+  setTimeout(
+    () => {
+      $status.fadeOut()
+    },
+    data.status === 'success' ? 5000 : 15000
+  )
 }
 
 window.addEventListener('load', () => {
   $copyMessage = $('#copyMessage')
+  $status = $('#status')
   $('main').on('click', 'a.copy', function (e) {
     e.preventDefault()
     e.stopPropagation()
@@ -51,7 +59,7 @@ window.addEventListener('load', () => {
   $('#addForm').on('submit', (e) => {
     e.preventDefault()
     $.ajax({
-      url: 'create.php',
+      url: 'create',
       method: 'POST',
       dataType: 'json',
       data: {
@@ -69,7 +77,7 @@ window.addEventListener('load', () => {
   })
 
   const listTable = $('#list').DataTable({
-    ajax: 'list.php',
+    ajax: 'read',
     columns: [{ data: 's' }, { data: 'l' }, { data: 'c' }],
     columnDefs: [
       {
@@ -138,7 +146,7 @@ window.addEventListener('load', () => {
     if (window.confirm('Are you sure you want to delete short URL ' + data.s + ' => ' + data.l + '?')) {
       console.log('Delete ' + data.s)
       $.ajax({
-        url: 'delete.php',
+        url: 'delete',
         method: 'POST',
         dataType: 'json',
         data: { s: data.s }

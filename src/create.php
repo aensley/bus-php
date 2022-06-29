@@ -1,16 +1,14 @@
 <?php
 
-require '../config.php';
-
-$short = !empty($_POST['s']) ? preg_replace('/[^a-z0-9-]/i', '', $_POST['s']) : '';
-$long = $_POST['l'];
+$short = getShort();
+$long = getLong();
 
 // Make sure at least the long URL was supplied.
 if (empty($long)) {
   http_response_code(400);
   echo json_encode(
     ['action' => 'create', 'status' => 'error', 'message' => 'Insufficient data supplied'],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
   exit();
 }
@@ -21,12 +19,11 @@ if (!filter_var($long, FILTER_VALIDATE_URL)) {
   http_response_code(400);
   echo json_encode(
     ['action' => 'create', 'status' => 'error', 'message' => 'Invalid URL supplied. Correct the URL and try again.'],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
   exit();
 }
 
-$data = getData();
 $longs = array_column($data, 'l');
 $found = array_search($long, $longs);
 
@@ -41,7 +38,7 @@ if ($found !== false) {
       'short' => $shorts[$found],
       'long' => $long,
     ],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
   exit();
 }
@@ -57,7 +54,7 @@ if (!empty($short) && array_key_exists($short, $data)) {
       'short' => $short,
       'long' => $data[$short]['l'],
     ],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
   exit();
 }
@@ -79,7 +76,7 @@ try {
   setData($data);
   echo json_encode(
     ['action' => 'create', 'status' => 'success', 'message' => 'Short URL added', 'short' => $short, 'long' => $long],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
 } catch (Exception $e) {
   http_response_code(500);
@@ -91,7 +88,7 @@ try {
       'short' => $short,
       'long' => $long,
     ],
-    JSON_FORCE_OBJECT
+    JSON_FORCE_OBJECT,
   );
 }
 

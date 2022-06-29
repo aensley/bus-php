@@ -5,15 +5,12 @@ require '../config.php';
 // Config
 $env = getEnvJson();
 $data = getData();
-$uri = trim($_SERVER['REQUEST_URI'], '/');
-if ($lastSlash = strrpos($uri, '/')) {
-  $uri = substr($uri, $lastSlash);
-}
+$url = getRequestedUrl();
 
 // Redirect
-if (strlen($uri) > 0 && isset($data[$uri])) {
+if (strlen($url) > 0 && isset($data[$url])) {
   http_response_code(REDIRECT_STATUS);
-  header('Location: ' . $data[$uri]['l']);
+  header('Location: ' . $data[$url]['l']);
   exit();
 }
 

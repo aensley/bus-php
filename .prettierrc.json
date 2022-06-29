@@ -17,6 +17,6 @@
   "quoteProps": "as-needed",
   "requirePragma": false,
   "vueIndentScriptAndStyle": false,
-  "phpVersion": "7.1",
+  "phpVersion": "8.1",
   "braceStyle": "1tbs"
 }

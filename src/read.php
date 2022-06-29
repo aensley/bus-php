@@ -1,8 +1,5 @@
 <?php
 
-require '../config.php';
-
-$data = getData();
 $list = ['data' => []];
 
 foreach ($data as $s => $val) {
