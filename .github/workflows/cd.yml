@@ -1,18 +1,16 @@
 name: cd
 
-on: push
-
-# on:
-#  push:
-#    branches:
-#      - main
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
     name: Release
     runs-on: ubuntu-latest
     steps:
-    - name: Release on ensl.ee
+    - name: Release in Production
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.HOST }}
