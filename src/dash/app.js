@@ -1,5 +1,6 @@
 import $ from 'jquery'
 import 'datatables.net-bs5'
+import { Modal } from 'bootstrap'
 import { library, icon } from '@fortawesome/fontawesome-svg-core'
 import { faTrashCan, faPlay } from '@fortawesome/free-solid-svg-icons'
 
@@ -10,6 +11,14 @@ const play = icon({ prefix: 'fas', iconName: 'play' }).html
 const trashCan = icon({ prefix: 'fas', iconName: 'trash-can' }).html
 let $copyMessage
 let $status
+let deleteConfirmation
+let $deleteConfirmButton
+let $deleteConfirmShort
+let $deleteConfirmLong
+let $copiedUrl
+let listTable
+let $shortRow
+let dcModal
 
 const setStatus = (data) => {
   console.log(data)
@@ -37,46 +46,107 @@ const setStatus = (data) => {
   )
 }
 
-window.addEventListener('load', () => {
+const setSelectors = () => {
   $copyMessage = $('#copyMessage')
+  $copiedUrl = $('#copiedUrl')
   $status = $('#status')
-  $('main').on('click', 'a.copy', function (e) {
-    e.preventDefault()
-    e.stopPropagation()
-    e.stopImmediatePropagation()
-    navigator.clipboard.writeText($(this).prop('href'))
-    $copyMessage.css('display', 'flex')
-    setTimeout(() => {
-      $copyMessage.fadeOut()
-    }, 1000)
-    return false
+  $deleteConfirmButton = $('#deleteConfirmButton')
+  deleteConfirmation = document.getElementById('deleteConfirmation')
+  $deleteConfirmShort = $('#deleteConfirmShort')
+  $deleteConfirmLong = $('#deleteConfirmLong')
+  $shortRow = $('#shortRow')
+  dcModal = new Modal(deleteConfirmation)
+  dcModal.hide()
+  deleteConfirmation.addEventListener('shown.bs.modal', function () {
+    $deleteConfirmButton.focus()
   })
-  $('button[type="submit"]').html(play)
-  $('#customShort').on('change', () => {
-    $('#shortRow').toggleClass('d-none')
-  })
+}
 
-  $('#addForm').on('submit', (e) => {
-    e.preventDefault()
-    $.ajax({
-      url: 'create',
-      method: 'POST',
-      dataType: 'json',
-      data: {
-        s: $('#short').val(),
-        l: $('#long').val()
-      }
+const getShortUrlA = (short, copy) => {
+  return (
+    '<a' +
+    (copy ? ' title="Copy Short URL"' : '') +
+    ' class="btn btn-secondary' +
+    (copy ? ' copy' : '') +
+    ' text-nowrap" href="https://' +
+    publicDomain +
+    '/' +
+    short +
+    '">' +
+    short +
+    '</a>'
+  )
+}
+
+const getLongUrlA = (long, copy) => {
+  return '<a' + (copy ? ' class="copy" title="Copy Long URL"' : '') + ' href="' + long + '">' + long + '</a>'
+}
+
+const handleCopyClick = function (e) {
+  e.preventDefault()
+  e.stopPropagation()
+  e.stopImmediatePropagation()
+  const url = $(this).prop('href')
+  $copiedUrl.text(url)
+  navigator.clipboard.writeText(url)
+  $copyMessage.css('display', 'flex')
+  setTimeout(() => {
+    $copyMessage.fadeOut()
+  }, 1500)
+  return false
+}
+
+const handleFormSubmit = (e) => {
+  e.preventDefault()
+  $.ajax({
+    url: 'create',
+    method: 'POST',
+    dataType: 'json',
+    data: {
+      s: $('#short').val(),
+      l: $('#long').val()
+    }
+  })
+    .done((d) => {
+      setStatus(d)
+      updateTable()
     })
-      .done((d) => {
-        setStatus(d)
-        updateTable()
-      })
-      .fail((d) => {
-        setStatus(JSON.parse(d.responseText))
-      })
-  })
+    .fail((d) => {
+      setStatus(JSON.parse(d.responseText))
+    })
+}
 
-  const listTable = $('#list').DataTable({
+const updateTable = () => {
+  listTable.ajax.reload()
+}
+
+const handleDeleteClick = function () {
+  const data = listTable.row($(this).parents('tr')[0]).data()
+  $deleteConfirmShort.html(getShortUrlA(data.s, false))
+  $deleteConfirmLong.html(getLongUrlA(data.l, false))
+  dcModal.show()
+  $deleteConfirmButton.data('short', data.s)
+}
+
+const handleConfirmDeleteClick = function () {
+  dcModal.hide()
+  $.ajax({
+    url: 'delete',
+    method: 'POST',
+    dataType: 'json',
+    data: { s: $(this).data('short') }
+  })
+    .done((d) => {
+      setStatus(d)
+      updateTable()
+    })
+    .fail((d) => {
+      setStatus(JSON.parse(d.responseText))
+    })
+}
+
+const setupDataTable = () => {
+  listTable = $('#list').DataTable({
     ajax: 'read',
     columns: [{ data: 's' }, { data: 'l' }, { data: 'c' }],
     columnDefs: [
@@ -85,15 +155,7 @@ window.addEventListener('load', () => {
         className: 'text-nowrap',
         render: (data, type) => {
           if (type === 'display') {
-            return (
-              '<a href="https://' +
-              publicDomain +
-              '/' +
-              data +
-              '" title="Copy Short URL" class="btn btn-secondary copy text-nowrap">' +
-              data +
-              '</a>'
-            )
+            return getShortUrlA(data, true)
           }
 
           return data
@@ -104,7 +166,7 @@ window.addEventListener('load', () => {
         className: 'dt-overflow align-middle',
         render: (data, type) => {
           if (type === 'display') {
-            return '<span><a href="' + data + '" class="copy" title="Copy Long URL">' + data + '</a></span>'
+            return '<span>' + getLongUrlA(data, true) + '</span>'
           }
 
           return data
@@ -132,34 +194,22 @@ window.addEventListener('load', () => {
       }
     ],
     deferRender: true,
-    dom: 'Blfrtip',
+    dom: 'frtip',
     lengthMenu: [5, 10, 25, 50, 100],
     pageLength: 5
   })
 
-  const updateTable = () => {
-    listTable.ajax.reload()
-  }
+  $('#list tbody').on('click', 'button', handleDeleteClick)
+}
 
-  $('#list tbody').on('click', 'button', function () {
-    const data = listTable.row($(this).parents('tr')[0]).data()
-    if (window.confirm('Are you sure you want to delete short URL ' + data.s + ' => ' + data.l + '?')) {
-      console.log('Delete ' + data.s)
-      $.ajax({
-        url: 'delete',
-        method: 'POST',
-        dataType: 'json',
-        data: { s: data.s }
-      })
-        .done((d) => {
-          setStatus(d)
-          updateTable()
-        })
-        .fail((d) => {
-          setStatus(JSON.parse(d.responseText))
-        })
-    } else {
-      console.log("Don't delete")
-    }
+window.addEventListener('load', () => {
+  $('button[type="submit"]').html(play)
+  setSelectors()
+  $('#addForm').on('submit', handleFormSubmit)
+  $('#customShort').on('change', () => {
+    $shortRow.toggleClass('d-none')
   })
+  $('main').on('click', 'a.copy', handleCopyClick)
+  $deleteConfirmButton.prepend(trashCan).on('click', handleConfirmDeleteClick)
+  setupDataTable()
 })

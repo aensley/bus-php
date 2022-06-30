@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{public-domain}} url shortener</title>
     <link rel="icon" type="image/svg+xml" href="img/favicon.svg" />
-    <link rel="stylesheet" href="dash-light.css" media="(prefers-color-scheme: light)" />
-    <link rel="stylesheet" href="dash-dark.css" media="(prefers-color-scheme: dark)" />
+    <link rel="stylesheet" href="dash-light.css" media="(prefers-color-scheme:light)" />
+    <link rel="stylesheet" href="dash-dark.css" media="(prefers-color-scheme:dark)" />
     <script defer src="app.js"></script>
   </head>
   <body>
@@ -45,7 +45,7 @@
               id="short"
               name="short"
               class="form-control form-control-lg text-center"
-              pattern="[a-zA-Z0-9-]"
+              pattern="[a-zA-Z0-9-]+"
               aria-describedby="shortCodeHelp"
               placeholder="Enter your custom short-code" />
             <div id="shortCodeHelp" class="form-text-lg">
@@ -79,8 +79,46 @@
       </div>
     </main>
     <div id="copyMessage">
-      <div class="card bg-info text-light">
-        <div class="card-body fs-4 py-3 px-5">URL copied</div>
+      <div class="card rounded bg-info text-light">
+        <div class="card-body fs-4 py-3 px-5">
+          <p id="copiedUrl"></p>
+          <p>URL copied</p>
+        </div>
+      </div>
+    </div>
+    <div
+      id="deleteConfirmation"
+      class="modal fade"
+      tabindex="-1"
+      aria-labelledby="deleteConfirmationLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteConfirmationLabel">Delete this URL?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th class="align-middle">Short:</th>
+                  <td class="align-middle" id="deleteConfirmShort"></td>
+                </tr>
+                <tr>
+                  <th class="align-middle">Long:</th>
+                  <td class="align-middle dt-overflow"><span id="deleteConfirmLong"></span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-danger" id="deleteConfirmButton">
+              <span class="ms-2">Delete</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </body>

@@ -2,25 +2,53 @@
 
 ## Style Guide
 
-See also: https://github.com/aensley/bus-assets
+See: https://github.com/aensley/bus-assets/blob/main/CONTRIBUTING.md
 
-### Logo Font
+## Setup
 
-- [Sue Ellen Francisco](https://fonts.google.com/specimen/Sue+Ellen+Francisco#standard-styles)
+### Pre-requisites
 
-### Color Palette
+- You must have the latest Node.js LTS release installed
+- You must have PHP >=7.0
 
-- **`#06bee1`** ![Primary - Cyan Process](https://img.shields.io/badge/-Primary%20--%20Cyan%20Process-%2306bee1?style=for-the-badge)
-- **`#f6ae2d`** ![Secondary - Honey Yellow](https://img.shields.io/badge/-Secondary%20--%20Honey%20Yellow-%23f6ae2d?style=for-the-badge)
-- **`#588157`** ![Tertiary - Fern Green](https://img.shields.io/badge/-Tertiary%20--%20Fern%20Green-%23588157?style=for-the-badge)
-- **`#083d77`** ![Indigo Dye](https://img.shields.io/badge/-Indigo%20Dye-%23083d77?style=for-the-badge)
-- **`#320e3b`** ![Russian Violet](https://img.shields.io/badge/-Russian%20Violet-%23320e3b?style=for-the-badge)
-- **`#8d6b94`** ![French Lilac](https://img.shields.io/badge/-French%20Lilac-%238d6b94?style=for-the-badge)
-- **`#922d50`** ![Quinacridone Magenta](https://img.shields.io/badge/-Quinacridone%20Magenta-%23922d50?style=for-the-badge)
-- **`#ad343e`** ![Cardinal](https://img.shields.io/badge/-Cardinal-%23ad343e?style=for-the-badge)
-- **`#dd614a`** ![Fire Opal](https://img.shields.io/badge/-Fire%20Opal-%23dd614a?style=for-the-badge)
-- **`#084c61`** ![Midnight Green Eagle Green](https://img.shields.io/badge/-Midnight%20Green%20Eagle%20Green-%23084c61?style=for-the-badge)
+### Install
 
-[**Full Color Palette**](https://coolors.co/06bee1-f6ae2d-588157-083d77-320e3b-8d6b94-922d50-ad343e-dd614a-084c61)
+To install dependencies, open a terminal to the root of the repository and run:
 
-[![Full Color Palette](bus-color-palette.png)](https://coolors.co/06bee1-f6ae2d-588157-083d77-320e3b-8d6b94-922d50-ad343e-dd614a-084c61)
+```ShellSession
+npm install
+```
+
+### Build
+
+To build the application, run:
+
+```ShellSession
+npm run build
+```
+
+### Watch
+
+To automaticaly build the site when source files change (useful during development), run:
+
+```ShellSession
+npm run watch
+```
+
+The session can be ended by pressing `CTRL+C`.
+
+### Test
+
+To run tests, use:
+
+```ShellSession
+npm test
+```
+
+### Format
+
+To automatically format source code (required before committing), run:
+
+```ShellSession
+npm run format
+```

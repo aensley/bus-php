@@ -9,21 +9,13 @@ const NO_ENV_HTML = __DIR__ . '/no-env.html';
 const NO_DATA_HTML = __DIR__ . '/no-data.html';
 const PUBLIC_HTML = __DIR__ . '/public.html';
 const DASH_HTML = __DIR__ . '/dash.html';
+const DEFAULT_SHORT_CODE_LENGTH = 4;
 const REDIRECT_STATUS = 301; // Moved Permanently
 
 date_default_timezone_set('UTC');
 
 function getRequestedUrl() {
-  $url = trim($_SERVER['REQUEST_URI'], '/');
-  if ($questionPos = strpos($url, '?')) {
-    $url = substr($url, 0, $questionPos);
-  }
-
-  if ($lastSlash = strrpos($url, '/')) {
-    $url = substr($url, $lastSlash);
-  }
-
-  return $url;
+  return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
 }
 
 function getEnvJson() {
@@ -38,7 +30,7 @@ function getEnvJson() {
 
 function getShortCodeLength() {
   $env = getEnvJson();
-  return !empty($env['short-code-length']) ? $env['short-code-length'] : 4;
+  return !empty($env['short-code-length']) ? $env['short-code-length'] : DEFAULT_SHORT_CODE_LENGTH;
 }
 
 function getData() {

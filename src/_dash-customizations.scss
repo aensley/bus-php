@@ -10,8 +10,13 @@ a:hover {
   color: $yellow;
 }
 
-.dataTables_length {
+.dataTables_length,
+.dataTables_info {
   float: left;
+}
+
+.dataTables_filter {
+  text-align: center !important;
 }
 
 .dt-overflow {
@@ -23,8 +28,8 @@ a:hover {
   }
   span {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: $table-cell-padding-x;
+    right: $table-cell-padding-x;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -41,7 +46,7 @@ a:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  background: transparentize($gray-700, 0.4);
+  background: transparentize($black, 0.4);
   z-index: 4;
   justify-content: center;
   align-items: center;
@@ -50,4 +55,8 @@ a:hover {
     cursor: default;
     opacity: 1;
   }
+}
+
+#copiedUrl {
+  text-decoration: underline;
 }
