@@ -1,5 +1,4 @@
 <h1 align="center">
-
 <img src="src/img/logo.svg" alt="BUS logo" height="196" width="400"><br/><br/>
 
 Basic URL Shortener
