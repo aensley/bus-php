@@ -2,7 +2,7 @@
 
 ## Style Guide
 
-See: https://github.com/aensley/bus-assets/blob/main/CONTRIBUTING.md
+See: <https://github.com/aensley/bus-assets>
 
 ## Setup
 
