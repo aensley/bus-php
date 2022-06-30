@@ -7,31 +7,21 @@ on:
 
 jobs:
   build:
-    if: ${{ false }} # Disable for now
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-      - name: Install dependencies
-        run: npm ci
-      - name: Build
-        run: npm run build --if-present
-        env:
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          CF_PAGES_COMMIT_SHA: ${{ github.event.after }}
-          CF_PAGES_BRANCH: ${{ github.event.ref }}
-      - name: Test
-        run: npm test
-      - name: Sentry release
-        uses: getsentry/action-release@v1.1.6
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: production
-          sourcemaps: ./dist/assets/js/
+    - name: Release in Production
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        fingerprint: ${{ secrets.FINGERPRINT }}
+        script_stop: true
+        script: |
+          cd /var/www/bus/
+          git pull
+          npm ci
+          npm run build

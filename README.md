@@ -1,12 +1,14 @@
 <h1 align="center">
-  <img src="src/img/logo.svg" alt="BUS logo" height="196" width="400"><br/><br/>
-  Basic URL Shortener
-</h1>
+<img src="src/img/logo.svg" alt="BUS logo" height="196" width="400"><br/><br/>
+
+Basic URL Shortener
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://prettier.io)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/aensley/bus?style=flat-square)
 [![GitHub Workflow Status (main)](https://img.shields.io/github/workflow/status/aensley/bus/ci/main?style=flat-square)](https://github.com/aensley/bus/actions/workflows/ci.yml?query=branch%3Amain)
+
+</h1>
 
 ## No-Frills Short URLs
 
