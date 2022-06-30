@@ -1,20 +1,18 @@
 <?php
 
+require '../config.php';
+
 // Config
-$env = json_decode(file_get_contents('../.env.json'), true);
-$data = json_decode(file_get_contents('../.data.json'), true);
-$uri = trim($_SERVER['REQUEST_URI'], '/');
-if ($lastSlash = strrpos($uri, '/')) {
-  $uri = substr($uri, $lastSlash);
-}
+$env = getEnvJson();
+$data = getData();
+$url = getRequestedUrl();
 
 // Redirect
-if (isset($data[$uri])) {
-  http_response_code(301); // Moved Permanently
-  header('Location: ' . $data[$uri]['l']);
-  exit;
+if (strlen($url) > 0 && isset($data[$url])) {
+  http_response_code(REDIRECT_STATUS);
+  header('Location: ' . $data[$url]['l']);
+  exit();
 }
 
 // Index
-$index = file_get_contents('.index.html');
-echo str_replace('{{site-name}}', $env['public-domain'], $index);
+readfile(PUBLIC_HTML);

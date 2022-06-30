@@ -2,14 +2,53 @@
 
 ## Style Guide
 
-See also: https://github.com/aensley/bus-assets
+See: <https://github.com/aensley/bus-assets>
 
-### Color Palette
+## Setup
 
-- **`#06bee1`** ![Primary](https://img.shields.io/badge/-Primary-%2306bee1?style=for-the-badge)
-- **`#f6ae2d`** ![Secondary](https://img.shields.io/badge/-Secondary-%23f6ae2d?style=for-the-badge)
-- **`#588157`** ![Tertiary](https://img.shields.io/badge/-Tertiary-%23588157?style=for-the-badge)
+### Pre-requisites
 
-### Font
+- You must have the latest Node.js LTS release installed
+- You must have PHP >=7.0
 
-- [Sue Ellen Francisco](https://fonts.google.com/specimen/Sue+Ellen+Francisco#standard-styles)
+### Install
+
+To install dependencies, open a terminal to the root of the repository and run:
+
+```ShellSession
+npm install
+```
+
+### Build
+
+To build the application, run:
+
+```ShellSession
+npm run build
+```
+
+### Watch
+
+To automaticaly build the site when source files change (useful during development), run:
+
+```ShellSession
+npm run watch
+```
+
+The session can be ended by pressing `CTRL+C`.
+
+### Test
+
+To run tests, use:
+
+```ShellSession
+npm test
+```
+
+### Format
+
+To automatically format source code (required before committing), run:
+
+```ShellSession
+npm run format
+```

@@ -20,16 +20,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Build
-        run: npm run build --if-present
-        env:
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          CF_PAGES_COMMIT_SHA: ${{ github.event.after }}
-          CF_PAGES_BRANCH: ${{ github.event.ref }}
+        run: mkdir -p dist && cp -f examples/.env.json dist/.env.json && npm run build --if-present
       - name: Test
         run: npm test
-      - name: run Lighthouse CI
-        run: |
-          npm install -g @lhci/cli
-          lhci autorun
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
