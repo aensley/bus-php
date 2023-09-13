@@ -5,8 +5,8 @@ Basic URL Shortener
 
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg?style=flat-square)](https://standardjs.com)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://prettier.io)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/aensley/bus?style=flat-square)
-[![GitHub Workflow Status (main)](https://img.shields.io/github/workflow/status/aensley/bus/ci/main?style=flat-square)](https://github.com/aensley/bus/actions/workflows/ci.yml?query=branch%3Amain)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/aensley/bus-php?style=flat-square)
+[![GitHub Workflow Status (main)](https://img.shields.io/github/actions/workflow/status/aensley/bus-php/ci.yml?branch=main&style=flat-square)](https://github.com/aensley/bus-php/actions/workflows/ci.yml?query=branch%3Amain)
 
 </h1>
 
@@ -21,10 +21,6 @@ The simplest of URL shorteners for self-hosted users. No analytics. No complex i
 - Simple, intuitive dashboard
 
 ### Example
-
-I run my own installation of BUS at <https://ensl.ee>
-
-The following URL brings you to the BUS GitHub page: <https://ensl.ee/bus>
 
 For screenshots of the dashboard, [check out the Wiki](https://github.com/aensley/bus/wiki).
 
@@ -49,7 +45,7 @@ For screenshots of the dashboard, [check out the Wiki](https://github.com/aensle
 1. Clone the repository
 
    ```ShellSession
-   $ git clone https://github.com/aensley/bus
+   $ git clone https://github.com/aensley/bus-php
    ```
 
 1. Install dependencies
